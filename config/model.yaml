@@ -1,0 +1,119 @@
+# DataPilot AI — LLM / fine-tuning configuration
+# Final V1 model selection locked (Priority 4). See docs/model_selection.md.
+# Do not fabricate training/evaluation metrics in this file.
+
+project:
+  name: DataPilot AI
+  version: 0.1.0
+
+reproducibility:
+  seed: 42
+
+# Candidates considered for Google Colab T4 (~15GB VRAM) with 4-bit QLoRA.
+candidates:
+  - id: qwen2.5-1.5b-instruct
+    model_id: Qwen/Qwen2.5-1.5B-Instruct
+    approx_params: 1.5B
+    notes: "Selected for V1: strong T4 headroom, instruct-tuned, PEFT-friendly."
+    peft_compatible: true
+    quantization_4bit: true
+    decision: selected
+  - id: phi-3.5-mini-instruct
+    model_id: microsoft/Phi-3.5-mini-instruct
+    approx_params: 3.8B
+    notes: "Strong reasoning for size; tighter T4 margin with long RAG context."
+    peft_compatible: true
+    quantization_4bit: true
+    decision: rejected_heavier_than_needed
+  - id: gemma-2-2b-it
+    model_id: google/gemma-2-2b-it
+    approx_params: 2B
+    notes: "Instruction-tuned; may require HF access acceptance (reproducibility risk)."
+    peft_compatible: true
+    quantization_4bit: true
+    decision: rejected_access_friction
+  - id: mistral-7b-instruct
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    approx_params: 7B
+    notes: "Higher quality ceiling; highest T4 risk for QLoRA + long context."
+    peft_compatible: true
+    quantization_4bit: true
+    decision: rejected_vram_risk
+
+# FINAL V1 selection — one model only.
+selected:
+  candidate_id: qwen2.5-1.5b-instruct
+  model_id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: null
+  trust_remote_code: false
+  selection_status: final_v1
+  selection_date: "2026-08-18"
+  selection_doc: docs/model_selection.md
+  selection_rationale: >
+    Selected for Colab T4 feasibility with 4-bit QLoRA and RAG, PEFT compatibility,
+    instruction-tuned behaviour, and faster evaluation iteration. Larger candidates
+    were rejected due to VRAM risk or access friction. This is a feasibility-led
+    academic V1 decision, not a fabricated quality ranking.
+
+# Executed Colab T4 (2026) training + eval used fp16 because bitsandbytes
+# has no CUDA 12.8 GPU wheel. Keep 4-bit as the default when bnb works;
+# HuggingFaceLLM / train.py fall back to fp16 if 4-bit load fails.
+# Colab experiments: python scripts/run_experiments.py --no-4bit
+quantization:
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: float16
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_use_double_quant: true
+
+lora:
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  bias: none
+  task_type: CAUSAL_LM
+  # Target modules for Qwen2-style architectures; confirm during training setup.
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+training:
+  # Epoch count is NOT fixed at 25. Choose based on validation behaviour / overfitting.
+  num_epochs: 3
+  max_epochs_cap: 25
+  early_stopping_patience: 2
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 2.0e-4
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.03
+  weight_decay: 0.01
+  max_seq_length: 1024
+  logging_steps: 10
+  eval_strategy: epoch
+  save_strategy: epoch
+  save_total_limit: 2
+  fp16: true
+  bf16: false
+  gradient_checkpointing: true
+  optim: paged_adamw_8bit
+  report_to: none
+  output_dir: ./experiments/results/adapters
+  logging_dir: ./experiments/logs/training
+
+inference:
+  max_new_tokens: 512
+  temperature: 0.2
+  top_p: 0.9
+  do_sample: true
+  repetition_penalty: 1.05
+
+paths:
+  adapter_dir: ./experiments/results/adapters
+  adapter_path: ./experiments/results/adapters/colab_t4_qlora_v1/adapter
+  baseline_cache_dir: ./.cache/models

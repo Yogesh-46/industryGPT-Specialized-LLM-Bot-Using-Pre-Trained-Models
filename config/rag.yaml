@@ -1,0 +1,79 @@
+# DataPilot AI — RAG pipeline configuration
+# Chunk / top-k values are starting points, not claimed optima.
+# Compare via optional experiments (chunk size, top-k, embeddings).
+
+project:
+  name: DataPilot AI
+  component: rag
+
+reproducibility:
+  seed: 42
+
+embeddings:
+  # Lightweight Sentence Transformers model suitable for Colab + local CPU/GPU.
+  # Configurable — do not hard-code in application logic.
+  model_id: sentence-transformers/all-MiniLM-L6-v2
+  alternative_candidates:
+    - sentence-transformers/all-MiniLM-L6-v2
+    - sentence-transformers/multi-qa-MiniLM-L6-cos-v1
+    - BAAI/bge-small-en-v1.5
+  selection_rationale: >
+    all-MiniLM-L6-v2 is a widely used, compact English embedding model with
+    strong semantic retrieval quality for its size, fast inference on Colab T4
+    and CPU, and low memory footprint. Alternatives may be compared in
+    Experiment 3. Final choice must be justified with retrieval metrics.
+  normalize_embeddings: true
+  batch_size: 32
+  device: auto
+
+chunking:
+  # Approximate token targets; tokenizer-aware chunking preferred in implementation.
+  chunk_size_tokens: 650
+  chunk_overlap_tokens: 75
+  min_chunk_chars: 200
+  max_chunk_chars: 6000
+  separators:
+    - "\n\n"
+    - "\n"
+    - ". "
+    - " "
+  strategy: recursive_character
+  preserve_metadata: true
+
+retrieval:
+  vector_store: faiss
+  index_type: IndexFlatIP
+  top_k: 5
+  score_threshold: null
+  # Optional; enable only if evaluation shows benefit and compute allows.
+  rerank:
+    enabled: false
+    model_id: null
+    top_n: 3
+
+vector_store:
+  persist_dir: ./knowledge_base/vector_store
+  index_filename: faiss.index
+  metadata_filename: chunks_metadata.jsonl
+  rebuildable: true
+
+prompting:
+  system_prompt_path: ./config/prompts/system_prompt.txt
+  max_context_chars: 8000
+  include_source_attribution: true
+  admit_uncertainty: true
+  out_of_domain_policy: refuse_politely
+
+conversation_memory:
+  enabled: true
+  max_turns: 8
+  max_history_chars: 6000
+
+query_processing:
+  lowercase: false
+  strip_whitespace: true
+  max_query_chars: 4000
+
+caching:
+  embeddings_cache_dir: ./.cache/embeddings
+  enable_disk_cache: true

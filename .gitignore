@@ -1,0 +1,105 @@
+# Secrets and local env
+.env
+.env.local
+*.pem
+*.key
+secrets/
+credentials/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter / Colab
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large / generated data artifacts (keep structure via .gitkeep)
+data/raw/**
+!data/raw/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+data/finetuning/**
+!data/finetuning/.gitkeep
+!data/finetuning/README.md
+data/evaluation/**
+!data/evaluation/.gitkeep
+!data/evaluation/README.md
+
+knowledge_base/documents/**
+!knowledge_base/documents/.gitkeep
+knowledge_base/chunks/**
+!knowledge_base/chunks/.gitkeep
+knowledge_base/vector_store/**
+!knowledge_base/vector_store/.gitkeep
+
+# Model checkpoints and adapters (store separately / document location)
+models/
+checkpoints/
+adapters/
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+!config/**/*.yaml
+
+# Experiment outputs (track small JSON summaries optionally; ignore heavy logs)
+experiments/logs/**
+!experiments/logs/.gitkeep
+experiments/results/**
+!experiments/results/.gitkeep
+!experiments/results/.gitkeep
+
+# Streamlit / caches
+.streamlit/secrets.toml
+__streamlit_cache__/
+.cache/
+hf_cache/
+transformers_cache/
+sentence_transformers_cache/
+
+# Misc
+*.log
+tmp/
+temp/
+*.tmp
+*.bak

@@ -1,0 +1,132 @@
+# DataPilot AI — evaluation configuration
+# Metrics and rubrics only. Do not fabricate scores or experiment outcomes.
+
+project:
+  name: DataPilot AI
+  component: evaluation
+
+reproducibility:
+  seed: 42
+
+datasets:
+  evaluation_path: ./data/evaluation/eval_set.jsonl
+  evaluation_meta_path: ./data/evaluation/eval_set_meta.json
+  evaluation_status: created_v1
+  evaluation_version: "1.0.0"
+  target_size: 100
+  isolation_rule: >
+    Evaluation questions MUST remain isolated from fine-tuning train/validation splits.
+  planned_distribution:
+    SQL: 25
+    Data Engineering: 20
+    Data Warehousing: 15
+    BI_Dashboards: 15
+    Analytics: 15
+    Out_of_domain: 10
+  category_labels:
+    BI_Dashboards: BI/Dashboards
+    Out_of_domain: Out-of-domain
+  difficulty_levels:
+    - easy
+    - medium
+    - hard
+
+systems_under_test:
+  - id: baseline_llm
+    name: Base / pre-trained LLM without domain RAG
+    uses_rag: false
+    uses_finetune: false
+  - id: rag_only
+    name: RAG-based DataPilot AI
+    uses_rag: true
+    uses_finetune: false
+  - id: finetuned_rag
+    name: Fine-tuned + RAG DataPilot AI
+    uses_rag: true
+    uses_finetune: true
+
+experiments:
+  - id: exp_01_baseline_vs_rag
+    name: Generic/base LLM vs RAG
+    required: true
+  - id: exp_02_rag_vs_finetuned_rag
+    name: RAG vs Fine-tuned + RAG
+    required: true
+  - id: exp_03_embedding_comparison
+    name: Embedding model comparison
+    required: false
+  - id: exp_04_chunk_size_comparison
+    name: Chunk size comparison
+    required: false
+  - id: exp_05_topk_comparison
+    name: Top-k comparison
+    required: false
+  - id: exp_06_latency_comparison
+    name: Latency comparison
+    required: false
+
+automatic_metrics:
+  - id: point_coverage
+    method: expected-answer-point lexical coverage heuristic
+    status: implemented
+  - id: token_f1
+    method: token overlap F1 vs reference_answer
+    status: implemented
+  - id: rouge_l
+    library: rouge-score (fallback LCS if unavailable)
+    status: implemented
+  - id: semantic_similarity
+    method: sentence-transformers cosine similarity
+    status: implemented_optional
+  - id: groundedness_proxy
+    method: answer token overlap with retrieved context
+    status: implemented
+  - id: retrieval_relevance_proxy
+    method: expected-point coverage in retrieved context
+    status: implemented
+  - id: ood_refusal_score
+    method: refusal cue detection for Out-of-domain items
+    status: implemented
+  - id: latency_ms
+    method: wall-clock ask() time
+    status: implemented
+
+rag_metrics:
+  - id: faithfulness
+    description: Approximated by groundedness_proxy in V1
+    status: implemented_proxy
+  - id: context_relevance
+    description: Approximated by retrieval_relevance_proxy in V1
+    status: implemented_proxy
+
+human_evaluation:
+  enabled: true
+  status: template_ready_scores_not_collected
+  scale: 1-5
+  dimensions:
+    - correctness
+    - relevance
+    - completeness
+    - groundedness
+  instruction: >
+    Do NOT fabricate human scores. Collect only after running systems on the
+    evaluation set and obtaining real annotator ratings.
+
+reporting:
+  results_dir: ./experiments/results
+  logs_dir: ./experiments/logs
+  required_fields:
+    - experiment_id
+    - datetime
+    - model
+    - dataset_version
+    - configuration
+    - parameters
+    - runtime
+    - metrics
+    - output_location
+  placeholders_until_run: "[To be populated after experiment]"  # optional exp_03/04/06 and human scores only
+
+out_of_domain:
+  evaluate_refusal_quality: true
+  expected_behaviour: polite_refusal_within_scope

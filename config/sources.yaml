@@ -1,0 +1,248 @@
+# DataPilot AI — curated knowledge source inventory (Dataset A)
+# IMPORTANT:
+# - This is a curated inventory of official documentation pages.
+# - Do NOT scrape entire sites indiscriminately.
+# - Collect only listed URLs (plus closely related pages explicitly added later).
+# - Respect robots.txt, terms of use, rate limits, and copyright.
+# - Store provenance (source, title, url, collected_at) for every document.
+# - Dataset A HTML is collected into data/raw/ (42/42 in the V1 inventory).
+
+inventory_version: "0.1.2"
+created_for: DataPilot AI Master's Project
+collection_status: collected_v1  # 42/42 HTML in data/raw/; re-runs skip unless --force
+notes: >
+  URLs below are curated targets for the BI Knowledge Hub.
+  Collect only these URLs via scripts/collect_documents.py.
+  Prefer official documentation pages. Cleaning/chunking: notebooks/02.
+
+politeness:
+  respect_robots_txt: true
+  default_delay_seconds: 1.5
+  user_agent_env: DATAPILOT_USER_AGENT
+  max_retries: 3
+
+sources:
+  - id: postgresql
+    name: PostgreSQL Documentation
+    category: SQL
+    license_note: "PostgreSQL docs are copyrighted by the PostgreSQL Global Development Group; use for academic research with attribution."
+    base_url: https://www.postgresql.org/docs/current/
+    topics:
+      - id: pg_select
+        title: SELECT
+        url: https://www.postgresql.org/docs/current/sql-select.html
+        topic: SELECT
+      - id: pg_join
+        title: Joins (FROM / JOIN)
+        url: https://www.postgresql.org/docs/current/queries-table-expressions.html
+        topic: JOIN
+      - id: pg_groupby
+        title: Aggregate Expressions / GROUP BY
+        url: https://www.postgresql.org/docs/current/sql-expressions.html
+        topic: GROUP BY
+      - id: pg_with
+        title: WITH Queries (Common Table Expressions)
+        url: https://www.postgresql.org/docs/current/queries-with.html
+        topic: CTE
+      - id: pg_window
+        title: Window Functions
+        url: https://www.postgresql.org/docs/current/tutorial-window.html
+        topic: Window Functions
+      - id: pg_agg
+        title: Aggregate Functions
+        url: https://www.postgresql.org/docs/current/functions-aggregate.html
+        topic: Aggregate Functions
+      - id: pg_subquery
+        title: Subqueries
+        url: https://www.postgresql.org/docs/current/functions-subquery.html
+        topic: Subqueries
+      - id: pg_indexes
+        title: Indexes
+        url: https://www.postgresql.org/docs/current/indexes.html
+        topic: Indexes
+      - id: pg_planner
+        title: Query Planning / EXPLAIN
+        url: https://www.postgresql.org/docs/current/using-explain.html
+        topic: Query Planning
+
+  - id: redshift
+    name: Amazon Redshift Documentation
+    category: Data Warehousing
+    license_note: "AWS documentation; use with attribution; respect AWS site terms."
+    base_url: https://docs.aws.amazon.com/redshift/
+    topics:
+      - id: rs_create_table
+        title: CREATE TABLE
+        url: https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_TABLE_NEW.html
+        topic: CREATE TABLE
+      - id: rs_diststyles
+        title: Distribution Styles
+        url: https://docs.aws.amazon.com/redshift/latest/dg/c_choosing_dist_sort.html
+        topic: Distribution Styles
+      - id: rs_distkey
+        title: Distribution Styles and DISTKEY guidance
+        url: https://docs.aws.amazon.com/redshift/latest/dg/t_Distributing_data.html
+        topic: DISTKEY
+      - id: rs_sortkey
+        title: Choosing Sort Keys
+        url: https://docs.aws.amazon.com/redshift/latest/dg/t_Sorting_data.html
+        topic: SORTKEY
+      - id: rs_copy
+        title: COPY
+        url: https://docs.aws.amazon.com/redshift/latest/dg/r_COPY.html
+        topic: COPY
+      - id: rs_analyze
+        title: ANALYZE
+        url: https://docs.aws.amazon.com/redshift/latest/dg/r_ANALYZE.html
+        topic: ANALYZE
+      - id: rs_vacuum
+        title: VACUUM
+        url: https://docs.aws.amazon.com/redshift/latest/dg/r_VACUUM_command.html
+        topic: VACUUM
+      - id: rs_query_perf
+        title: Query Performance Tuning
+        url: https://docs.aws.amazon.com/redshift/latest/dg/c-optimizing-query-performance.html
+        topic: Query Performance
+
+  - id: powerbi
+    name: Microsoft Learn / Power BI Documentation
+    category: BI Platforms
+    license_note: "Microsoft documentation; respect Microsoft site terms; attribute sources."
+    base_url: https://learn.microsoft.com/en-us/power-bi/
+    topics:
+      - id: pbi_model
+        title: Data modeling in Power BI
+        url: https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationship-view
+        topic: Data Models
+      - id: pbi_relationships
+        title: Model relationships
+        url: https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand
+        topic: Relationships
+      - id: pbi_measures
+        title: Measures
+        url: https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-measures
+        topic: Measures
+      - id: pbi_dax
+        title: DAX basics
+        url: https://learn.microsoft.com/en-us/dax/dax-overview
+        topic: DAX
+      - id: pbi_calc_cols
+        title: Calculated columns
+        url: https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculated-columns
+        topic: Calculated Columns
+      - id: pbi_visuals
+        title: Visualizations
+        url: https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-report-visualizations
+        topic: Visualizations
+      - id: pbi_report_design
+        title: Report design guidance
+        url: https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-view
+        topic: Report Design
+
+  - id: superset
+    name: Apache Superset Documentation
+    category: BI Platforms
+    license_note: "Apache License 2.0 documentation; attribute Apache Superset."
+    base_url: https://superset.apache.org/user-docs/
+    topics:
+      - id: ss_datasets
+        title: Datasets
+        url: https://superset.apache.org/user-docs/using-superset/creating-your-first-dashboard/
+        topic: Datasets
+      - id: ss_charts
+        title: Creating charts
+        url: https://superset.apache.org/user-docs/using-superset/creating-your-first-dashboard/
+        topic: Charts
+      - id: ss_dashboards
+        title: Creating dashboards
+        url: https://superset.apache.org/user-docs/using-superset/creating-your-first-dashboard/
+        topic: Dashboards
+      - id: ss_sqllab
+        title: SQL Lab
+        url: https://superset.apache.org/user-docs/using-superset/creating-your-first-dashboard/
+        topic: SQL Lab
+        note: "End-user SQL Lab overview currently appears in the first-dashboard guide; dedicated SQL Lab user page relocated."
+      - id: ss_filters
+        title: Filtering data
+        url: https://superset.apache.org/user-docs/using-superset/exploring-data/
+        topic: Filters
+      - id: ss_viz
+        title: Visualization types overview
+        url: https://superset.apache.org/user-docs/using-superset/exploring-data/
+        topic: Visualization
+
+  - id: airflow
+    name: Apache Airflow Documentation
+    category: Data Engineering
+    license_note: "Apache License 2.0 documentation; attribute Apache Airflow."
+    base_url: https://airflow.apache.org/docs/apache-airflow/stable/
+    topics:
+      - id: af_dags
+        title: DAGs
+        url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html
+        topic: DAGs
+      - id: af_tasks
+        title: Tasks
+        url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html
+        topic: Tasks
+      - id: af_operators
+        title: Operators
+        url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html
+        topic: Operators
+      - id: af_scheduling
+        title: DAG Runs / Scheduling
+        url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html
+        topic: Scheduling
+      - id: af_deps
+        title: Dependencies / TaskFlow
+        url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/taskflow.html
+        topic: Dependencies
+      - id: af_ti
+        title: Task Instances
+        url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/tasks.html
+        topic: Task Instances
+        note: "Task Instances section lives on the Tasks page in current Airflow docs."
+
+  - id: dbt
+    name: dbt Documentation
+    category: Data Engineering
+    license_note: "dbt Labs documentation; respect dbt Labs terms; attribute sources."
+    base_url: https://docs.getdbt.com/
+    topics:
+      - id: dbt_models
+        title: About models
+        url: https://docs.getdbt.com/docs/build/models
+        topic: Models
+      - id: dbt_sources
+        title: Sources
+        url: https://docs.getdbt.com/docs/build/sources
+        topic: Sources
+      - id: dbt_tests
+        title: Data tests
+        url: https://docs.getdbt.com/docs/build/data-tests
+        topic: Tests
+      - id: dbt_snapshots
+        title: Snapshots
+        url: https://docs.getdbt.com/docs/build/snapshots
+        topic: Snapshots
+      - id: dbt_incremental
+        title: Incremental models
+        url: https://docs.getdbt.com/docs/build/incremental-models
+        topic: Incremental Models
+      - id: dbt_docs
+        title: Documentation
+        url: https://docs.getdbt.com/docs/collaborate/documentation
+        topic: Documentation
+
+coverage_summary:
+  total_sources: 6
+  total_curated_urls: 42
+  categories:
+    - SQL
+    - Data Warehousing
+    - BI Platforms
+    - Data Engineering
+  status: >
+    Inventory v0.1.2 collected into data/raw (HTML + provenance metadata).
+    URL corrections applied for Power BI report view, Airflow Task Instances,
+    and Superset user-docs relocation.

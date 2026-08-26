@@ -1,0 +1,78 @@
+# DataPilot AI — document preprocessing configuration
+
+project:
+  name: DataPilot AI
+  component: preprocessing
+
+reproducibility:
+  seed: 42
+
+paths:
+  raw_dir: ./data/raw
+  processed_dir: ./data/processed
+  knowledge_documents_dir: ./knowledge_base/documents
+  stats_dir: ./data/processed/stats
+
+cleaning:
+  remove_tags:
+    - script
+    - style
+    - noscript
+    - svg
+    - canvas
+    - iframe
+    - form
+    - button
+    - input
+    - select
+    - textarea
+    - nav
+    - footer
+    - header
+    - aside
+  # Prefer these containers when present (first match wins).
+  main_content_selectors:
+    - "main"
+    - "article"
+    - "[role='main']"
+    - "#content"
+    - "#main-content"
+    - ".main-content"
+    - ".document"
+    - ".body"
+    - "#docs-content"
+    - ".theme-doc-markdown"
+    - ".md-content"
+    - "#main"
+  collapse_whitespace: true
+  normalize_newlines: true
+  strip_lines: true
+  drop_empty_lines: true
+
+validation:
+  min_chars: 300
+  max_chars: 500000
+  min_words: 50
+  require_title: true
+  require_url: true
+  require_source_id: true
+  # Pages smaller than this after cleaning are treated as empty/malformed shells.
+  empty_after_clean_chars: 50
+
+duplicates:
+  # Exact duplicate detection on normalized content hash.
+  enabled: true
+  hash_algorithm: sha256
+
+statistics:
+  approximate_tokens_chars_per_token: 4.0
+  write_figures: true
+  figure_formats:
+    - png
+
+output:
+  documents_subdir: documents
+  documents_jsonl: documents.jsonl
+  rejected_jsonl: rejected.jsonl
+  stats_filename: preprocessing_stats.json
+  report_filename: preprocessing_report.md

@@ -1,0 +1,28 @@
+{
+  "dataset_id": "datapilot_eval_v1",
+  "version": "1.0.0",
+  "n_items": 100,
+  "held_out": true,
+  "isolation": "Must not be used in fine-tuning train/validation",
+  "path": "data/evaluation/eval_set.jsonl",
+  "distribution": {
+    "SQL": 25,
+    "Data Engineering": 20,
+    "Data Warehousing": 15,
+    "BI/Dashboards": 15,
+    "Analytics": 15,
+    "Out-of-domain": 10
+  },
+  "difficulty": {
+    "easy": 32,
+    "medium": 46,
+    "hard": 22
+  },
+  "construction_notes": [
+    "Questions authored for held-out evaluation only",
+    "Reference answers grounded in curated official docs where available",
+    "Dimensional modelling / analytics items use established domain concepts explicitly marked",
+    "Out-of-domain items evaluate refusal behaviour",
+    "No fabricated experiment metrics"
+  ]
+}

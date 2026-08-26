@@ -1,0 +1,32 @@
+{
+  "dataset_id": "datapilot_ft_v1",
+  "version": "1.1.0",
+  "total_examples": 667,
+  "train_examples": 600,
+  "validation_examples": 67,
+  "removed_due_to_eval_overlap": 12,
+  "by_category": {
+    "SQL": 131,
+    "Data Engineering": 119,
+    "Data Warehousing": 106,
+    "BI/Dashboards": 110,
+    "Analytics": 101,
+    "Out-of-domain": 100
+  },
+  "held_out_eval_path": "data/evaluation/eval_set.jsonl",
+  "isolation_guarantees": [
+    "No instruction equals an evaluation question (normalized match)",
+    "Dataset C remains untouched and unused for training"
+  ],
+  "notes": [
+    "Quality-focused instruction set for BI/DE response style and task behaviour",
+    "Factual responses aligned to curated domain concepts/official docs",
+    "SQL examples explicitly note they were not executed",
+    "Out-of-domain examples teach polite refusal"
+  ],
+  "paths": {
+    "train": "data/finetuning/train.jsonl",
+    "validation": "data/finetuning/validation.jsonl",
+    "all": "data/finetuning/all.jsonl"
+  }
+}

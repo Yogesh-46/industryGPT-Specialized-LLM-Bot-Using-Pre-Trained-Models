@@ -1,0 +1,16 @@
+{
+  "has_training": true,
+  "has_retrieval": true,
+  "has_exp_01": true,
+  "has_exp_02": true,
+  "retrieval_dir": "D:\\Projects\\Masters_Project\\experiments\\results\\evaluation\\exp_05_topk_retrieval_20260819T104858Z",
+  "exp_01_dir": "D:\\Projects\\Masters_Project\\experiments\\results\\evaluation\\exp_01_baseline_vs_rag_20260820T141231Z",
+  "exp_02_dir": "D:\\Projects\\Masters_Project\\experiments\\results\\evaluation\\exp_02_rag_vs_finetuned_rag_20260820T143647Z",
+  "figures": [
+    "fig_training_loss.png",
+    "fig_eval_loss_epochs.png",
+    "fig_retrieval_topk.png",
+    "fig_retrieval_by_category.png",
+    "fig_retrieval_by_difficulty.png"
+  ]
+}

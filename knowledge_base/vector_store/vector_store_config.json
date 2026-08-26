@@ -1,0 +1,9 @@
+{
+  "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedding_dim": 384,
+  "ntotal": 281,
+  "index_type": "IndexFlatIP",
+  "index_filename": "faiss.index",
+  "metadata_filename": "chunks_metadata.jsonl",
+  "rebuildable": true
+}
